@@ -36,6 +36,7 @@ public class Wolk extends Vector<Point2D.Double> {
 		} catch (IOException e) {
 			System.out.println("Fout");
 		}
+		computeDistances();
 	}
 	
 	public void addPoint(double x, double y) {
@@ -54,5 +55,42 @@ public class Wolk extends Vector<Point2D.Double> {
 	
 	public Rectangle2D.Double getBoundingRectangle() {
 		return new Rectangle2D.Double(minx, miny, maxx - minx, maxy - miny);
+	}
+	
+	public Double[][] computeDistances() {
+		
+		int n = this.elementCount;
+		Double[][] distances = new Double[n][n];
+		
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {				
+				distances[i][j] = this.get(i).distance(this.get(j));
+			}
+		}
+		
+		return distances;
+		
+		/*
+		Iterator<Point2D.Double> iter1 = this.iterator();		
+		while (iter1.hasNext()) {
+			Point2D.Double point1 = iter1.next();	
+			
+			Iterator<Point2D.Double> iter2 = this.iterator();
+			while (iter2.hasNext()) {				
+				Point2D.Double point2 = iter2.next();				
+				double d = point1.distance(point2);				
+			}
+			
+					
+		}
+		*/
+	}
+	
+	public void findTangentLine(Point2D.Double point, int k) {
+		
+		//vat k punten dichtste bij point
+		//reken lijn uit
+		
+		
 	}
 }
