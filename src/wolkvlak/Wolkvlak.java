@@ -2,8 +2,6 @@ package wolkvlak;
 
 import java.awt.*;
 
-import javax.swing.*;
-import javax.swing.event.*;
 import java.io.*;
 import java.util.*;
 import java.awt.geom.Point2D;
