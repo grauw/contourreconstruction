@@ -31,13 +31,17 @@ public class Wolkvlak extends Canvas {
 		super.paint(g);
 		initCoordinateSystem(g, wolk.getBoundingRectangle());
 		
-		Iterator<Point2D.Double> iter = wolk.iterator();
+		Iterator<Wolkpunt> iter = wolk.iterator();
 		
 		while (iter.hasNext()) {
-			Point2D.Double point = iter.next();
+			Wolkpunt point = iter.next();
 			
+			g.setColor(Color.BLUE);
 			g.fillRect(toX(point.x)-1,toY(point.y)-1,3,3);
+			g.setColor(Color.RED);
+			g.fillRect(toX(point.centroid.x)-1,toY(point.centroid.y)-1,3,3);
 		}
+		
 	}
 	
 	/**

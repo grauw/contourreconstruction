@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class Wolk extends Vector<Point2D.Double> {
+public class Wolk extends Vector<Wolkpunt> {
 	static final long serialVersionUID = 123172398;
 	
 	double maxx = Double.NEGATIVE_INFINITY;
@@ -36,11 +36,14 @@ public class Wolk extends Vector<Point2D.Double> {
 		} catch (IOException e) {
 			System.out.println("Fout");
 		}
-		computeDistances();
+		
+		for (int i=0; i<this.size(); i++) {
+			this.get(i).calcCentroid(this, 4);
+		}
 	}
 	
 	public void addPoint(double x, double y) {
-		Point2D.Double point = new Point2D.Double();
+		Wolkpunt point = new Wolkpunt();
 		point.setLocation(x, y);
 		this.add(point);
 		maxx = Math.max(x, maxx);
@@ -49,7 +52,7 @@ public class Wolk extends Vector<Point2D.Double> {
 		miny = Math.min(y, miny);
 	}
 	
-	public Point2D.Double getPoint(int p) {
+	public Wolkpunt getPoint(int p) {
 		return this.get(p);
 	}
 	
@@ -57,40 +60,4 @@ public class Wolk extends Vector<Point2D.Double> {
 		return new Rectangle2D.Double(minx, miny, maxx - minx, maxy - miny);
 	}
 	
-	public Double[][] computeDistances() {
-		
-		int n = this.elementCount;
-		Double[][] distances = new Double[n][n];
-		
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {				
-				distances[i][j] = this.get(i).distance(this.get(j));
-			}
-		}
-		
-		return distances;
-		
-		/*
-		Iterator<Point2D.Double> iter1 = this.iterator();		
-		while (iter1.hasNext()) {
-			Point2D.Double point1 = iter1.next();	
-			
-			Iterator<Point2D.Double> iter2 = this.iterator();
-			while (iter2.hasNext()) {				
-				Point2D.Double point2 = iter2.next();				
-				double d = point1.distance(point2);				
-			}
-			
-					
-		}
-		*/
-	}
-	
-	public void findTangentLine(Point2D.Double point, int k) {
-		
-		//vat k punten dichtste bij point
-		//reken lijn uit
-		
-		
-	}
 }
