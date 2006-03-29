@@ -38,7 +38,7 @@ public class Wolk extends Vector<Wolkpunt> {
 		}
 		
 		for (int i=0; i<this.size(); i++) {
-			this.get(i).calcCentroid(this, 4);
+			this.get(i).calcCentroid(this, 2);
 		}
 	}
 	

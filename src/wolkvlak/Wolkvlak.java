@@ -40,6 +40,13 @@ public class Wolkvlak extends Canvas {
 			g.fillRect(toX(point.x)-1,toY(point.y)-1,3,3);
 			g.setColor(Color.RED);
 			g.fillRect(toX(point.centroid.x)-1,toY(point.centroid.y)-1,3,3);
+			
+			
+			g.setColor(Color.YELLOW);
+			g.drawLine(toX(point.x), toX(point.y), toX(point.x + point.eigenVector1.x), toX(point.y + point.eigenVector1.y));
+			//g.drawLine(toX(point.x), toX(point.y), toX(point.x - point.eigenVector1.x), toX(point.y - point.eigenVector1.y));
+			
+			
 		}
 		
 	}
