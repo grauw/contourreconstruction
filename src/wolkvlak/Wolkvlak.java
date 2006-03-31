@@ -4,7 +4,6 @@ import java.awt.*;
 
 import java.io.*;
 import java.util.*;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 public class Wolkvlak extends Canvas {
@@ -15,16 +14,8 @@ public class Wolkvlak extends Canvas {
 	
 	Wolk wolk;
 	
-	public Wolkvlak () {
-		
-	}
-	
-	public Wolkvlak (String filename) {
-		
-		wolk = new Wolk(new File(filename));
-		
-		
-		
+	public Wolkvlak (String filename) {		
+		wolk = new Wolk(new File(filename));		
 	}
 	
 	public void paint(Graphics g) {
@@ -42,7 +33,7 @@ public class Wolkvlak extends Canvas {
 			g.fillRect(toX(point.centroid.x)-1,toY(point.centroid.y)-1,3,3);
 			
 			
-			g.setColor(Color.YELLOW);
+			g.setColor(Color.PINK);
 			g.drawLine(toX(point.x), toX(point.y), toX(point.x + point.eigenVector1.x), toX(point.y + point.eigenVector1.y));
 			//g.drawLine(toX(point.x), toX(point.y), toX(point.x - point.eigenVector1.x), toX(point.y - point.eigenVector1.y));
 			

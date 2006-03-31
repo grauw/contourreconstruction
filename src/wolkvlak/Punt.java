@@ -20,8 +20,7 @@ public class Punt extends Point2D.Double {
 	//Inproduct
 	public double dot(Punt punt)
 	{			
-		return (this.x * punt.x) + (this.y * punt.y);
-		
+		return (this.x * punt.x) + (this.y * punt.y);		
 	}
 	
 	//Uitproduct
