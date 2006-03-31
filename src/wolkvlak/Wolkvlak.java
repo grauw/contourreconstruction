@@ -14,6 +14,8 @@ public class Wolkvlak extends Canvas {
 	
 	Wolk wolk;
 	
+	final int VECTORSCHAAL = 10;
+	
 	public Wolkvlak (String filename) {		
 		wolk = new Wolk(new File(filename));		
 	}
@@ -27,16 +29,41 @@ public class Wolkvlak extends Canvas {
 		while (iter.hasNext()) {
 			Wolkpunt point = iter.next();
 			
+			
+			//Teken wolkpunten:
 			g.setColor(Color.BLUE);
 			g.fillRect(toX(point.x)-1,toY(point.y)-1,3,3);
+			
+			//Teken centroïden:			
 			g.setColor(Color.RED);
 			g.fillRect(toX(point.centroid.x)-1,toY(point.centroid.y)-1,3,3);
 			
+
+			//Teken tangentlijnen:			
+			g.setColor(Color.PINK);					
 			
-			g.setColor(Color.PINK);
-			g.drawLine(toX(point.x), toX(point.y), toX(point.x + point.eigenVector1.x), toX(point.y + point.eigenVector1.y));
-			//g.drawLine(toX(point.x), toX(point.y), toX(point.x - point.eigenVector1.x), toX(point.y - point.eigenVector1.y));
+			double x0 = point.eigenVector1.x * VECTORSCHAAL / 2;
+			double x1 = point.centroid.x - x0;
+			double x2 = point.centroid.x + x0;
 			
+			double y0 = point.eigenVector1.y * VECTORSCHAAL / 2;
+			double y1 = point.centroid.y - y0;
+			double y2 = point.centroid.y + y0;
+			
+			g.drawLine(toX(x1), toY(y1), toX(x2), toY(y2));
+
+			//Teken normaalvectoren:
+			g.setColor(Color.ORANGE);	
+			
+			x0 = point.eigenVector2.x * VECTORSCHAAL / 2;
+			x1 = point.centroid.x;
+			x2 = point.centroid.x + x0;
+			
+			y0 = point.eigenVector2.y * VECTORSCHAAL / 2;
+			y1 = point.centroid.y;
+			y2 = point.centroid.y + y0;
+			
+			g.drawLine(toX(x1), toY(y1), toX(x2), toY(y2));
 			
 		}
 		
