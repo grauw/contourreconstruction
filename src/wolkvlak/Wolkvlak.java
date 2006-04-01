@@ -16,6 +16,7 @@ public class Wolkvlak extends Canvas {
 	public boolean drawcentroids = true;
 	public boolean drawtangentlines = true;
 	public boolean drawnormalvectors = true;
+	public boolean drawspanningtree = true;
 	public boolean drawsigneddistance = true;
 	
 	Wolk wolk;
@@ -76,6 +77,24 @@ public class Wolkvlak extends Canvas {
 				double y2 = point.centroid.y + y0;
 				
 				g.drawLine(toX(x1), toY(y1), toX(x2), toY(y2));
+			}
+		}
+		
+		if (drawspanningtree) {
+			g.setColor(Color.BLACK);
+			boolean m[][] = wolk.emst.m;
+			for (int i=0; i<m.length; i++) {
+				for (int j=0; j<m[i].length; j++) {
+					
+					if (m[i][j]) {
+						double x1 = wolk.get(i).x;
+						double y1 = wolk.get(i).y;
+						double x2 = wolk.get(j).x;
+						double y2 = wolk.get(j).y;
+						
+						g.drawLine(toX(x1), toY(y1), toX(x2), toY(y2));
+					}
+				}
 			}
 		}
 		

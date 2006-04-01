@@ -24,7 +24,8 @@ public class ContourReconstruction extends Frame implements ItemListener{
 	CheckboxMenuItem miDrawCentroids;
 	CheckboxMenuItem miDrawTangentLines;
 	CheckboxMenuItem miDrawNormalVectors;
-	CheckboxMenuItem miSignedDistance;
+	CheckboxMenuItem miDrawSignedDistance;
+	CheckboxMenuItem miDrawSpanningTree;
 	
 	Wolkvlak wolkvlak;
 	
@@ -61,9 +62,12 @@ public class ContourReconstruction extends Frame implements ItemListener{
 		miDrawNormalVectors = new CheckboxMenuItem("Normal vectors", wolkvlak.drawnormalvectors);
 		miDrawNormalVectors.addItemListener(this);
 		mDraw.add(miDrawNormalVectors);
-		miSignedDistance = new CheckboxMenuItem("Signed distance", wolkvlak.drawsigneddistance);
-		miSignedDistance.addItemListener(this);
-		mDraw.add(miSignedDistance);
+		miDrawSpanningTree = new CheckboxMenuItem("Spanning tree", wolkvlak.drawspanningtree);
+		miDrawSpanningTree.addItemListener(this);
+		mDraw.add(miDrawSpanningTree);
+		miDrawSignedDistance = new CheckboxMenuItem("Signed distance", wolkvlak.drawsigneddistance);
+		miDrawSignedDistance.addItemListener(this);
+		mDraw.add(miDrawSignedDistance);
 		menubar.add(mDraw);
 		setMenuBar(menubar);
 	}
@@ -81,8 +85,11 @@ public class ContourReconstruction extends Frame implements ItemListener{
 		} else if (e.getSource() == miDrawTangentLines) {
 			wolkvlak.drawtangentlines = miDrawTangentLines.getState();
 			wolkvlak.repaint();
-		} else if (e.getSource() == miSignedDistance) {
-			wolkvlak.drawsigneddistance = miSignedDistance.getState();
+		} else if (e.getSource() == miDrawSpanningTree) {
+			wolkvlak.drawspanningtree = miDrawSpanningTree.getState();
+			wolkvlak.repaint();
+		} else if (e.getSource() == miDrawSignedDistance) {
+			wolkvlak.drawsigneddistance = miDrawSignedDistance.getState();
 			wolkvlak.repaint();
 		}
 	}

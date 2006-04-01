@@ -8,15 +8,18 @@ public class Wolkpunt extends Punt {
 	Punt centroid;
 	Punt tangentVector;
 	Punt normalVector;
+	Wolkpunt[] dichtstebijpunten;
 	
 	public void calcCentroid(Wolk wolk, int k) {
 		Wolkpunt[] punten = vatDichstbijPunten(wolk, k);
-		centroid = new Punt();
 		
-		for (int i=0; i<k; i++) {			
+		dichtstebijpunten = new Wolkpunt[k];
+		centroid = new Punt();
+		for (int i=0; i<k; i++) {
+			dichtstebijpunten[i] = punten[i];
 			centroid.x += punten[i].x;
-			centroid.y += punten[i].y;			
-		}	
+			centroid.y += punten[i].y;
+		}
 		
 		centroid.x /= k;
 		centroid.y /= k;

@@ -15,6 +15,7 @@ public class Wolk extends Vector<Wolkpunt> {
 	double maxy = Double.NEGATIVE_INFINITY;
 	double minx = Double.POSITIVE_INFINITY;
 	double miny = Double.POSITIVE_INFINITY;
+	EMST emst = new EMST();
 	
 	public Wolk(File file) {
 		BufferedReader reader;
@@ -38,8 +39,11 @@ public class Wolk extends Vector<Wolkpunt> {
 		}
 		
 		for (int i=0; i<this.size(); i++) {
-			this.get(i).calcCentroid(this, 2);
+			this.get(i).calcCentroid(this, 4);
 		}
+		
+		emst.mst(this);
+//		emst.enrich(this);
 	}
 	
 	public void addPoint(double x, double y) {
