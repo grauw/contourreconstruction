@@ -61,7 +61,7 @@ public class ContourReconstruction extends Frame implements ItemListener{
 		miDrawNormalVectors = new CheckboxMenuItem("Normal vectors", wolkvlak.drawnormalvectors);
 		miDrawNormalVectors.addItemListener(this);
 		mDraw.add(miDrawNormalVectors);
-		miSignedDistance = new CheckboxMenuItem("Normal vectors", wolkvlak.drawsigneddistance);
+		miSignedDistance = new CheckboxMenuItem("Signed distance", wolkvlak.drawsigneddistance);
 		miSignedDistance.addItemListener(this);
 		mDraw.add(miSignedDistance);
 		menubar.add(mDraw);

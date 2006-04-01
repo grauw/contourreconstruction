@@ -6,8 +6,8 @@ import java.util.Arrays;
 public class Wolkpunt extends Punt {
 	
 	Punt centroid;
-	Punt eigenVector1;
-	Punt eigenVector2;
+	Punt tangentVector;
+	Punt normalVector;
 	
 	public void calcCentroid(Wolk wolk, int k) {
 		Wolkpunt[] punten = vatDichstbijPunten(wolk, k);
@@ -24,15 +24,18 @@ public class Wolkpunt extends Punt {
 		//vat k punten dichtste bij point
 		//reken lijn uit		
 		
-		double covXX = covariance(punten, centroid, true, true);
-		double covYY = covariance(punten, centroid, false, false);
-		double covXY = covariance(punten, centroid, true, false);
+		double covXX = covarianceXX(punten, centroid);
+		double covYY = covarianceYY(punten, centroid);
+		double covXY = covarianceXY(punten, centroid);
 		
 		Point2D.Double eigenValues = eigenValues(covXX, covYY, covXY);
 		
-		eigenVector1 = eigenVector(covXX, covXY, eigenValues.x);
-		eigenVector2 = eigenVector(covXX, covXY, eigenValues.y);		
+		tangentVector = eigenVector(covXX, covXY, eigenValues.x);
+		normalVector = eigenVector(covXX, covXY, eigenValues.y);		
 		
+		if (normalVector.y == java.lang.Double.NaN) {
+			System.out.println("xxxxxxx");
+		}
 		
 	}
 	
@@ -63,89 +66,75 @@ public class Wolkpunt extends Punt {
 		return paar;
 	}	
 	
-	private double covariance(Wolkpunt[] punten, Point2D.Double centroid, boolean x1, boolean x2)
+	private double covarianceXX(Wolkpunt[] punten, Point2D.Double centroid)
 	{
-		//AAAAANNNPPAAASSSSEN, gestolen code!!!
-		
-		int i, cPoints = punten.length;
 		double total = 0;
+		for(int i = 0; i < punten.length; i++) {
+			total += Math.pow(punten[i].x - centroid.x, 2);
+		}
+		return total / (punten.length - 1);
+	}
 		
-		if(x1 && x2)
-		{
-			for(i = 0; i < cPoints; i++)
-			{
-				total += Math.pow(punten[i].x - centroid.x, 2);
-			}
+	private double covarianceYY(Wolkpunt[] punten, Point2D.Double centroid)
+	{
+		double total = 0;
+		for(int i = 0; i < punten.length; i++) {
+			total += Math.pow(punten[i].y - centroid.y, 2);
 		}
-		else if(!x1 && !x2)
-		{
-			for(i = 0; i < cPoints; i++)
-			{
-				total += Math.pow(punten[i].y - centroid.y, 2);
-			}
+		return total / (punten.length - 1);
+	}
+		
+	private double covarianceXY(Wolkpunt[] punten, Point2D.Double centroid)
+	{
+		double total = 0;
+		for(int i = 0; i < punten.length; i++) {
+			total += (punten[i].x - centroid.x) * (punten[i].y - centroid.y);
 		}
-		else
-		{
-			for(i = 0; i < cPoints; i++)
-			{
-				total += (punten[i].x - centroid.x) * (punten[i].y - centroid.y);
-			}
-		}
-
-		return total / (double)(cPoints - 1);
+		return total / (punten.length - 1);
 	}
 		
 	private Punt eigenValues(double covXX, double covYY, double covXY)
 	{
-		//AAAAANNNPPAAASSSSEN, gestolen code!!!
+		double a = 1;
+		double b = -(covXX + covYY);
+		double c = covXX*covYY - covXY*covXY;
+		
+		double D = Math.sqrt(b*b - 4*a*c);
 		
 		double eigenValue1, eigenValue2;
 		
-		// 2x2 Matrix:
-		// a-L	b
-		// c	d-L
+/*		if (D < 0) {
+			//geen uitkomst
+		} else if (D == 0) {
+			//één uitkomst
+		} else {
+			//twee uitkomsten
+		}
+*/		
+		eigenValue1 = (-b + D) / (2 * a);
+		eigenValue2 = (-b - D) / (2 * a);
 		
-		// Determinant	:	(a-L)(d-L) - cb
-		// Omgebouwd	:	L^2 - adL + ad - cb
-		// Als polynoom met ABC -> AL^2 + BL + C
-		// a = covXX
-		// b = covXY
-		// c = covYX
-		// d = covYY
-		// A = 1
-		// B = -(covXX * covYY)
-		// C = (covXX * covYY) - (covYX * covXY)
+		Punt eigenValues = new Punt();
 		
-		double a				= 1;
-		double b				= -(covXX + covYY);
-		double c				= (covXX * covYY) - (covXY * covXY);
-		
-		double sqrt_det_abc	= (double)Math.sqrt((b * b) - (4 * a * c));
-		double a2			= 2 * a;
-				
-		eigenValue1			= (-b + sqrt_det_abc) / a2;
-		eigenValue2			= (-b - sqrt_det_abc) / a2;
-		
-		Punt eigenValues	= new Punt();
-		
-		if(eigenValue1 < eigenValue2) 
-		{
+		if (eigenValue1 < eigenValue2) {
 			eigenValues.x = eigenValue2;
 			eigenValues.y = eigenValue1;
-		}
-		else 
-		{
+		} else {
 			eigenValues.x = eigenValue1;
-			eigenValues.y = eigenValue2;			
+			eigenValues.y = eigenValue2;
 		}
 		
 		return eigenValues;
 	}
 	
-	private Punt eigenVector(double covXX, double covXY, double eigenValue)
-	{	
-
-		return new Punt(1, -(covXX - eigenValue) / covXY).normalize();
+	private Punt eigenVector(double covXX, double covXY, double eigenValue) {
+		Punt vector;
+		if (covXY == 0) {
+			vector = new Punt(1.0, Math.signum(-(covXX - eigenValue)));
+		} else {
+			vector = new Punt(1.0, -(covXX - eigenValue) / covXY);
+		}
+		return vector.normalize();
 	}
 	
 	

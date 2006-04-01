@@ -52,11 +52,11 @@ public class Wolkvlak extends Canvas {
 			if (drawtangentlines) {
 				g.setColor(Color.PINK);
 				
-				double x0 = point.eigenVector1.x * VECTORSCHAAL / 2;
+				double x0 = point.tangentVector.x * VECTORSCHAAL / 2;
 				double x1 = point.centroid.x - x0;
 				double x2 = point.centroid.x + x0;
 				
-				double y0 = point.eigenVector1.y * VECTORSCHAAL / 2;
+				double y0 = point.tangentVector.y * VECTORSCHAAL / 2;
 				double y1 = point.centroid.y - y0;
 				double y2 = point.centroid.y + y0;
 				
@@ -67,17 +67,16 @@ public class Wolkvlak extends Canvas {
 			if (drawnormalvectors) {
 				g.setColor(Color.ORANGE);
 				
-				double x0 = point.eigenVector2.x * VECTORSCHAAL / 2;
+				double x0 = point.normalVector.x * VECTORSCHAAL / 2;
 				double x1 = point.centroid.x;
 				double x2 = point.centroid.x + x0;
 				
-				double y0 = point.eigenVector2.y * VECTORSCHAAL / 2;
+				double y0 = point.normalVector.y * VECTORSCHAAL / 2;
 				double y1 = point.centroid.y;
 				double y2 = point.centroid.y + y0;
 				
 				g.drawLine(toX(x1), toY(y1), toX(x2), toY(y2));
 			}
-			
 		}
 		
 	}
