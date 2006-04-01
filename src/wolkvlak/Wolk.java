@@ -43,7 +43,7 @@ public class Wolk extends Vector<Wolkpunt> {
 		}
 		
 		emst.mst(this);
-//		emst.enrich(this);
+		//emst.enrich(this);
 	}
 	
 	public void addPoint(double x, double y) {

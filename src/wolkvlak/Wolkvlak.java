@@ -82,11 +82,11 @@ public class Wolkvlak extends Canvas {
 		
 		if (drawspanningtree) {
 			g.setColor(Color.BLACK);
-			boolean m[][] = wolk.emst.m;
-			for (int i=0; i<m.length; i++) {
-				for (int j=0; j<m[i].length; j++) {
+			boolean edge[][] = wolk.emst.edge;
+			for (int i=0; i<edge.length; i++) {
+				for (int j=0; j<edge[i].length; j++) {
 					
-					if (m[i][j]) {
+					if (edge[i][j]) {
 						double x1 = wolk.get(i).x;
 						double y1 = wolk.get(i).y;
 						double x2 = wolk.get(j).x;

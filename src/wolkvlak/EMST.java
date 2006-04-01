@@ -4,7 +4,7 @@ public class EMST {
 
 
 	public int	n = 10;				// the current number of terminals
-	public boolean m[][];			// the minimum spanning tree edges
+	public boolean edge[][];			// the minimum spanning tree edges
 
 	//mst - compute a minimum spanning tree using Prim's algorithm with "dumb"
 	//heaps.  This is the fastest graph algorithm for complete graphs, though
@@ -15,17 +15,17 @@ public class EMST {
 		int closest; 
 		double minDist, d;
 		
-		m = new boolean[n][n];
+		edge = new boolean[n][n];
 		
 		double[] dist = new double[n];
 		int[] neigh = new int[n];
 		
 		// initialize data structures
 		for (int i = 0; i < n; i++) {
-			dist[i] = wolk.get(0).distance(wolk.get(i)); 
+			dist[i] = wolk.get(0).distance(wolk.get(i));
 			neigh[i] = 0;
 			for (int j = 0; j < n; j++) {
-				m[i][j] = false;
+				edge[i][j] = false;
 			}
 		}
 		
@@ -39,18 +39,22 @@ public class EMST {
 					minDist = dist[j];
 				}
 			}
-	  
-			// set an edge from it to its nearest neighbor
-			m[neigh[closest]][closest] = true;
-			m[closest][neigh[closest]] = true;
-		
-			// update nearest distances to current partial tree
-			for (int j = 1; j < n; j++) {
-				d = wolk.get(j).distance(wolk.get(closest));
-				if (d < dist[j]) {
-					dist[j] = d;
-					neigh[j] = closest;
+			
+			if (closest != -1) {
+				// set an edge from it to its nearest neighbor
+				edge[neigh[closest]][closest] = true;
+				edge[closest][neigh[closest]] = true;
+				
+				// update nearest distances to current partial tree
+				for (int j = 1; j < n; j++) {
+					d = wolk.get(j).distance(wolk.get(closest));
+					if (d < dist[j]) {
+						dist[j] = d;
+						neigh[j] = closest;
+					}
 				}
+			} else {
+				// gat????
 			}
 		}
 	}
@@ -60,8 +64,8 @@ public class EMST {
 			Wolkpunt wolkpunt = wolk.get(i);
 			for (int j=0; j<wolkpunt.dichtstebijpunten.length; j++) {
 				int jindex = vindPuntIndex(wolk, wolkpunt.dichtstebijpunten[j]);
-				m[i][jindex] = true;
-				m[jindex][i] = true;
+				edge[i][jindex] = true;
+				edge[jindex][i] = true;
 			}
 		}
 	}
