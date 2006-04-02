@@ -18,6 +18,7 @@ public class Wolkvlak extends Canvas {
 	public boolean drawnormalvectors = true;
 	public boolean drawspanningtree = true;
 	public boolean drawsigneddistance = true;
+	public boolean drawmarchedsquares = true;
 	
 	Wolk wolk;
 	
@@ -95,6 +96,17 @@ public class Wolkvlak extends Canvas {
 						g.drawLine(toX(x1), toY(y1), toX(x2), toY(y2));
 					}
 				}
+			}
+		}
+		
+		if (drawmarchedsquares) {
+			Iterator<Punt> spiter = wolk.squarepunten.iterator();
+			
+			g.setColor(Color.BLACK);
+			while (spiter.hasNext()) {
+				Punt punt1 = spiter.next();
+				Punt punt2 = spiter.next();
+				g.drawLine(toX(punt1.x), toY(punt1.y), toX(punt2.x), toY(punt2.y));
 			}
 		}
 		

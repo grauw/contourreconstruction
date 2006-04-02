@@ -14,7 +14,7 @@ public class Wolkpunt extends Punt {
 	}
 	
 	public double signedDistance(Punt p) {		
-		return p.subtract(centroid).dot(normalVector);		
+		return p.minus(centroid).dot(normalVector);		
 	}
 	
 	public void calcCentroid(Wolk wolk, int k) {
@@ -40,10 +40,6 @@ public class Wolkpunt extends Punt {
 		
 		tangentVector = eigenVector(covXX, covXY, eigenValues.x);
 		normalVector = eigenVector(covXX, covXY, eigenValues.y);		
-		
-		if (normalVector.y == java.lang.Double.NaN) {
-			System.out.println("xxxxxxx");
-		}
 		
 	}
 	

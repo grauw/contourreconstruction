@@ -17,6 +17,10 @@ public class Wolk extends Vector<Wolkpunt> {
 	double miny = Double.POSITIVE_INFINITY;
 	EMST emst = new EMST();
 	
+	double grid = 100;
+	double delta = 1;
+	Vector<Punt> squarepunten;
+	
 	public Wolk(File file, int k) {
 		BufferedReader reader;
 		try {
@@ -43,9 +47,11 @@ public class Wolk extends Vector<Wolkpunt> {
 		}
 		
 		emst.mst(this);
-		emst.enrich(this, k);
+		emst.enrich(this, 4);
 		emst.klusCosts(this);
 		emst.doeNormaals(this);
+		
+		squarepunten = zetMeDieSquaresJeWéétToch(grid, delta);
 	}
 	
 	public void addPoint(double x, double y) {
@@ -64,6 +70,51 @@ public class Wolk extends Vector<Wolkpunt> {
 	
 	public Rectangle2D.Double getBoundingRectangle() {
 		return new Rectangle2D.Double(minx, miny, maxx - minx, maxy - miny);
+	}
+	
+	public double signedDistance(Punt p) {
+		Iterator<Wolkpunt> iter = iterator();
+		Wolkpunt dichtstebij = null;
+		double dichtstebijdistance = Double.POSITIVE_INFINITY;
+		
+		while (iter.hasNext()) {
+			Wolkpunt punt = iter.next();
+			double distance = p.distance(punt);
+			if (distance < dichtstebijdistance) {
+				dichtstebij = punt;
+				dichtstebijdistance = distance;
+			}
+		}
+		double ofthespacecowboy = dichtstebij.signedDistance(p);
+		return ofthespacecowboy;
+	}
+	
+	public Vector<Punt> zetMeDieSquaresJeWéétToch(double grid, double delta) {
+		Vector<Punt> punten = new Vector<Punt>();
+		
+		double stepx = (maxx-minx) / grid;
+		double stepy = (maxy-miny) / grid;
+		
+		for (int i=0; i<grid; i++) {
+			for (int j=0; j<grid; j++) {
+				Punt puntTL = new Punt(minx+i*stepx,miny+j*stepy);
+				Punt puntTR = new Punt(minx+(i+1)*stepx,miny+j*stepy);
+				Punt puntBL = new Punt(minx+i*stepx,miny+(j+1)*stepy);
+				Punt puntBR = new Punt(minx+(i+1)*stepx,miny+(j+1)*stepy);
+				
+				boolean topleft = signedDistance(puntTL) < delta;
+				boolean topright = signedDistance(puntTR) < delta;
+				boolean bottomleft = signedDistance(puntBL) < delta;
+				boolean bottomright = signedDistance(puntBR) < delta;
+				
+				if (topleft    != topright)    punten.add(new Punt(minx+(i+.5)*stepx,miny+ j    *stepy));
+				if (bottomleft != bottomright) punten.add(new Punt(minx+(i+.5)*stepx,miny+(j+1) *stepy));
+				if (topleft    != bottomleft)  punten.add(new Punt(minx+ i    *stepx,miny+(j+.5)*stepy));
+				if (topright   != bottomright) punten.add(new Punt(minx+(i+1) *stepx,miny+(j+.5)*stepy));
+			}
+		}
+		
+		return punten;
 	}
 	
 }

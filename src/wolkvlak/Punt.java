@@ -13,7 +13,7 @@ public class Punt extends Point2D.Double {
 	}
 	
 	// Punt - Punt
-	public Punt subtract(Punt punt) {	
+	public Punt minus(Punt punt) {	
 		return new Punt(
 				x - punt.x,
 				y - punt.y

@@ -26,6 +26,7 @@ public class ContourReconstruction extends Frame implements ItemListener{
 	CheckboxMenuItem miDrawNormalVectors;
 	CheckboxMenuItem miDrawSignedDistance;
 	CheckboxMenuItem miDrawSpanningTree;
+	CheckboxMenuItem miDrawMarchedSquares;
 	
 	Wolkvlak wolkvlak;
 	
@@ -45,7 +46,7 @@ public class ContourReconstruction extends Frame implements ItemListener{
 	    } catch (IllegalAccessException e) {
 	    }
 
-	    wolkvlak = new Wolkvlak("prac3-2.txt", 4);
+	    wolkvlak = new Wolkvlak("prac3-1.txt", 3);
 	    this.add(wolkvlak);
 	    
 		MenuBar menubar = new MenuBar();
@@ -68,6 +69,9 @@ public class ContourReconstruction extends Frame implements ItemListener{
 		miDrawSignedDistance = new CheckboxMenuItem("Signed distance", wolkvlak.drawsigneddistance);
 		miDrawSignedDistance.addItemListener(this);
 		mDraw.add(miDrawSignedDistance);
+		miDrawMarchedSquares = new CheckboxMenuItem("Marched squares", wolkvlak.drawmarchedsquares);
+		miDrawMarchedSquares.addItemListener(this);
+		mDraw.add(miDrawMarchedSquares);
 		menubar.add(mDraw);
 		setMenuBar(menubar);
 	}
@@ -90,6 +94,9 @@ public class ContourReconstruction extends Frame implements ItemListener{
 			wolkvlak.repaint();
 		} else if (e.getSource() == miDrawSignedDistance) {
 			wolkvlak.drawsigneddistance = miDrawSignedDistance.getState();
+			wolkvlak.repaint();
+		} else if (e.getSource() == miDrawMarchedSquares) {
+			wolkvlak.drawmarchedsquares = miDrawMarchedSquares.getState();
 			wolkvlak.repaint();
 		}
 	}
