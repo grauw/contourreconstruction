@@ -26,7 +26,7 @@ public class Wolkvlak extends Canvas {
 	public int k_planes = 4;
 	public String filename = "prac3-1.txt"; 
 	
-	Wolk wolk;
+	public Wolk wolk;
 	
 	final int VECTORSCHAAL = 10;
 	
@@ -35,7 +35,12 @@ public class Wolkvlak extends Canvas {
 	}
 	
 	public void reloadWolk() {
-		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta);		
+		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta);
+		repaint();
+	}
+	
+	public void recalcSquarePunten() {
+		wolk.squarepunten = wolk.zetMeDieSquaresJeWéétToch(grid, delta);		
 		repaint();
 	}
 	

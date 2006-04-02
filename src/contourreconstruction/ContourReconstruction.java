@@ -84,13 +84,14 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		
 		range_grid = new JSlider(0,200,wolkvlak.grid);
 		range_sample = new JSlider(0,1500,(int)Math.round(wolkvlak.delta*100));
-		range_planes_k = new JSlider(0,10,wolkvlak.k_planes);
+		range_planes_k = new JSlider(1,10,wolkvlak.k_planes);
 		range_emst_k = new JSlider(0,10,wolkvlak.k_emst);
 		
 		range_grid.setMajorTickSpacing(100);
 		range_grid.setMinorTickSpacing(10);
 		range_grid.setPaintTicks(true);
 		range_grid.setPaintLabels(true);
+		range_grid.setSnapToTicks(true);
 		
 		range_sample.setMajorTickSpacing(500);
 		range_sample.setMinorTickSpacing(100);
@@ -101,15 +102,17 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		labelTable.put( new Integer( 1500 ), new JLabel("15") );
 		range_sample.setLabelTable( labelTable );
 		
-		range_planes_k.setMajorTickSpacing(10);
+		range_planes_k.setMajorTickSpacing(9);
 		range_planes_k.setMinorTickSpacing(1);
 		range_planes_k.setPaintTicks(true);
 		range_planes_k.setPaintLabels(true);
+		range_planes_k.setSnapToTicks(true);
 		
 		range_emst_k.setMajorTickSpacing(10);
 		range_emst_k.setMinorTickSpacing(1);
 		range_emst_k.setPaintTicks(true);
 		range_emst_k.setPaintLabels(true);
+		range_emst_k.setSnapToTicks(true);
 		
 		range_grid.addChangeListener(this);
 		range_sample.addChangeListener(this);
@@ -160,6 +163,15 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource() == range_grid && !range_grid.getValueIsAdjusting()) {
 			wolkvlak.grid = range_grid.getValue();
+			wolkvlak.recalcSquarePunten();
+		} else if (e.getSource() == range_sample && !range_sample.getValueIsAdjusting()) {
+			wolkvlak.delta = range_sample.getValue() / 100.0;
+			wolkvlak.recalcSquarePunten();
+		} else if (e.getSource() == range_planes_k && !range_planes_k.getValueIsAdjusting()) {
+			wolkvlak.k_planes = range_planes_k.getValue();
+			wolkvlak.reloadWolk();
+		} else if (e.getSource() == range_emst_k && !range_emst_k.getValueIsAdjusting()) {
+			wolkvlak.k_emst = range_emst_k.getValue();
 			wolkvlak.reloadWolk();
 		}
 	}
