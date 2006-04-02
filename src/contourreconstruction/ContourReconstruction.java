@@ -45,7 +45,7 @@ public class ContourReconstruction extends Frame implements ItemListener{
 	    } catch (IllegalAccessException e) {
 	    }
 
-	    wolkvlak = new Wolkvlak("prac3-1.txt");
+	    wolkvlak = new Wolkvlak("prac3-2.txt", 4);
 	    this.add(wolkvlak);
 	    
 		MenuBar menubar = new MenuBar();

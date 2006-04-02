@@ -17,7 +17,7 @@ public class Wolk extends Vector<Wolkpunt> {
 	double miny = Double.POSITIVE_INFINITY;
 	EMST emst = new EMST();
 	
-	public Wolk(File file) {
+	public Wolk(File file, int k) {
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(file));
@@ -39,11 +39,13 @@ public class Wolk extends Vector<Wolkpunt> {
 		}
 		
 		for (int i=0; i<this.size(); i++) {
-			this.get(i).calcCentroid(this, 4);
+			this.get(i).calcCentroid(this, k);
 		}
 		
 		emst.mst(this);
-		//emst.enrich(this);
+		emst.enrich(this, k);
+		emst.klusCosts(this);
+		emst.doeNormaals(this);
 	}
 	
 	public void addPoint(double x, double y) {

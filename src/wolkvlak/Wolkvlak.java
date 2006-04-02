@@ -23,8 +23,8 @@ public class Wolkvlak extends Canvas {
 	
 	final int VECTORSCHAAL = 10;
 	
-	public Wolkvlak (String filename) {		
-		wolk = new Wolk(new File(filename));		
+	public Wolkvlak (String filename, int k) {		
+		wolk = new Wolk(new File(filename), k);		
 	}
 	
 	public void paint(Graphics g) {
@@ -81,16 +81,16 @@ public class Wolkvlak extends Canvas {
 		}
 		
 		if (drawspanningtree) {
-			g.setColor(Color.BLACK);
-			boolean edge[][] = wolk.emst.edge;
+			g.setColor(Color.GRAY);
+			boolean edge[][] = wolk.emst.geweesteEdges;
 			for (int i=0; i<edge.length; i++) {
 				for (int j=0; j<edge[i].length; j++) {
 					
 					if (edge[i][j]) {
-						double x1 = wolk.get(i).x;
-						double y1 = wolk.get(i).y;
-						double x2 = wolk.get(j).x;
-						double y2 = wolk.get(j).y;
+						double x1 = wolk.get(i).centroid.x;
+						double y1 = wolk.get(i).centroid.y;
+						double x2 = wolk.get(j).centroid.x;
+						double y2 = wolk.get(j).centroid.y;
 						
 						g.drawLine(toX(x1), toY(y1), toX(x2), toY(y2));
 					}
