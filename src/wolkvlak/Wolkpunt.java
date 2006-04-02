@@ -8,6 +8,14 @@ public class Wolkpunt extends Punt {
 	Punt centroid;
 	Punt tangentVector;
 	Punt normalVector;
+
+	public double signedDistance() {
+		return signedDistance(this);
+	}
+	
+	public double signedDistance(Punt p) {		
+		return p.subtract(centroid).dot(normalVector);		
+	}
 	
 	public void calcCentroid(Wolk wolk, int k) {
 		Wolkpunt[] punten = vatDichstbijPunten(wolk, k);

@@ -12,6 +12,14 @@ public class Punt extends Point2D.Double {
 		super(x, y);
 	}
 	
+	// Punt - Punt
+	public Punt subtract(Punt punt) {	
+		return new Punt(
+				x - punt.x,
+				y - punt.y
+			);
+	}
+	
 	//Inproduct
 	public double dot(Punt punt) {			
 		return (x * punt.x) + (y * punt.y);		
