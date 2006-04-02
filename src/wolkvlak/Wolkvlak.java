@@ -20,12 +20,23 @@ public class Wolkvlak extends Canvas {
 	public boolean drawsigneddistance = true;
 	public boolean drawmarchedsquares = true;
 	
+	public int grid = 100;
+	public double delta = 1;
+	public int k_emst = 4;
+	public int k_planes = 4;
+	public String filename = "prac3-1.txt"; 
+	
 	Wolk wolk;
 	
 	final int VECTORSCHAAL = 10;
 	
-	public Wolkvlak (String filename, int k) {		
-		wolk = new Wolk(new File(filename), k);		
+	public Wolkvlak() {
+		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta);		
+	}
+	
+	public void reloadWolk() {
+		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta);		
+		repaint();
 	}
 	
 	public void paint(Graphics g) {

@@ -1,25 +1,19 @@
 package contourreconstruction;
 
 import wolkvlak.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import java.awt.CheckboxMenuItem;
-import java.awt.Frame;
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-public class ContourReconstruction extends Frame implements ItemListener{
+public class ContourReconstruction extends Frame implements ItemListener, ActionListener, ChangeListener {
 	static final long serialVersionUID = 914893476;
 
-	static final int width = 500;
+	static final int width = 600;
 	static final int height = 400;
 	
+	MenuItem miOpenFile;
 	CheckboxMenuItem miDrawWolkpunten;
 	CheckboxMenuItem miDrawCentroids;
 	CheckboxMenuItem miDrawTangentLines;
@@ -27,6 +21,7 @@ public class ContourReconstruction extends Frame implements ItemListener{
 	CheckboxMenuItem miDrawSignedDistance;
 	CheckboxMenuItem miDrawSpanningTree;
 	CheckboxMenuItem miDrawMarchedSquares;
+	JSlider range_grid, range_sample, range_planes_k, range_emst_k;
 	
 	Wolkvlak wolkvlak;
 	
@@ -45,11 +40,20 @@ public class ContourReconstruction extends Frame implements ItemListener{
 	    } catch (UnsupportedLookAndFeelException e) {
 	    } catch (IllegalAccessException e) {
 	    }
-
-	    wolkvlak = new Wolkvlak("prac3-1.txt", 3);
-	    this.add(wolkvlak);
+	    
+		setLayout(new BorderLayout());
+	    
+	    wolkvlak = new Wolkvlak();
+	    this.add(wolkvlak, BorderLayout.CENTER);
 	    
 		MenuBar menubar = new MenuBar();
+		
+		Menu mFile = new Menu("File");
+		miOpenFile = new MenuItem("Opên filé...");
+		miOpenFile.addActionListener(this);
+		mFile.add(miOpenFile);
+		menubar.add(mFile);
+		
 		Menu mDraw = new Menu("Draw");
 		miDrawWolkpunten = new CheckboxMenuItem("Wolkpunten", wolkvlak.drawwolkpunten);
 		miDrawWolkpunten.addItemListener(this);
@@ -74,6 +78,54 @@ public class ContourReconstruction extends Frame implements ItemListener{
 		mDraw.add(miDrawMarchedSquares);
 		menubar.add(mDraw);
 		setMenuBar(menubar);
+		
+		Container c = Box.createVerticalBox();
+		c.setBackground(UIManager.getColor("control"));
+		
+		range_grid = new JSlider(0,200,wolkvlak.grid);
+		range_sample = new JSlider(0,1500,(int)Math.round(wolkvlak.delta*100));
+		range_planes_k = new JSlider(0,10,wolkvlak.k_planes);
+		range_emst_k = new JSlider(0,10,wolkvlak.k_emst);
+		
+		range_grid.setMajorTickSpacing(100);
+		range_grid.setMinorTickSpacing(10);
+		range_grid.setPaintTicks(true);
+		range_grid.setPaintLabels(true);
+		
+		range_sample.setMajorTickSpacing(500);
+		range_sample.setMinorTickSpacing(100);
+		range_sample.setPaintTicks(true);
+		range_sample.setPaintLabels(true);
+		Hashtable<Integer,JLabel> labelTable = new Hashtable<Integer,JLabel>();
+		labelTable.put( new Integer( 0 ), new JLabel("0") );
+		labelTable.put( new Integer( 1500 ), new JLabel("15") );
+		range_sample.setLabelTable( labelTable );
+		
+		range_planes_k.setMajorTickSpacing(10);
+		range_planes_k.setMinorTickSpacing(1);
+		range_planes_k.setPaintTicks(true);
+		range_planes_k.setPaintLabels(true);
+		
+		range_emst_k.setMajorTickSpacing(10);
+		range_emst_k.setMinorTickSpacing(1);
+		range_emst_k.setPaintTicks(true);
+		range_emst_k.setPaintLabels(true);
+		
+		range_grid.addChangeListener(this);
+		range_sample.addChangeListener(this);
+		range_planes_k.addChangeListener(this);
+		range_emst_k.addChangeListener(this);
+		
+		c.add(new Label("Grid density:"));
+		c.add(range_grid);
+		c.add(new Label("Sample density:"));
+		c.add(range_sample);
+		c.add(new Label("Nearest neighbours (planes):"));
+		c.add(range_planes_k);
+		c.add(new Label("Nearest neighbours (EMST):"));
+		c.add(range_emst_k);
+		
+		add(c, BorderLayout.WEST);
 	}
 	
 	public void itemStateChanged(ItemEvent e) {
@@ -100,6 +152,18 @@ public class ContourReconstruction extends Frame implements ItemListener{
 			wolkvlak.repaint();
 		}
 	}
+	
+	public void actionPerformed(ActionEvent e) {
+		
+	}
+	
+	public void stateChanged(ChangeEvent e) {
+		if (e.getSource() == range_grid && !range_grid.getValueIsAdjusting()) {
+			wolkvlak.grid = range_grid.getValue();
+			wolkvlak.reloadWolk();
+		}
+	}
+	
 	
 	/**
 	 * @param args

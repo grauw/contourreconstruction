@@ -17,11 +17,14 @@ public class Wolk extends Vector<Wolkpunt> {
 	double miny = Double.POSITIVE_INFINITY;
 	EMST emst = new EMST();
 	
-	double grid = 100;
+	int grid = 100;
 	double delta = 1;
 	Vector<Punt> squarepunten;
 	
-	public Wolk(File file, int k) {
+	public Wolk(File file, int k, int k_emst, int grid, double delta) {
+		this.grid = grid;
+		this.delta = delta;
+		
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(file));
@@ -47,7 +50,7 @@ public class Wolk extends Vector<Wolkpunt> {
 		}
 		
 		emst.mst(this);
-		emst.enrich(this, 4);
+		emst.enrich(this, k_emst);
 		emst.klusCosts(this);
 		emst.doeNormaals(this);
 		
