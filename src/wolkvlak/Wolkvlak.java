@@ -27,7 +27,7 @@ public class Wolkvlak extends Canvas {
 	public double delta = 5;
 	public int k_planes = 3;
 	public int k_emst = 4;
-	public String filename = "prac3-2.txt"; 
+	public String filename = "prac3-1.txt"; 
 	
 	public Wolk wolk;
 	
