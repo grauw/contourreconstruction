@@ -163,7 +163,18 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == miRedraw) {
 			wolkvlak.reloadWolk();
+		} else if (e.getSource() == miOpenFile) {
+			kiesBestand();
 		}
+	}
+	
+	public void kiesBestand() {
+		JFileChooser chooser = new JFileChooser("c:\\");
+		int returnVal = chooser.showOpenDialog(this);
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			wolkvlak.filename = chooser.getSelectedFile().getName();
+			wolkvlak.reloadWolk();
+		    }
 	}
 	
 	public void stateChanged(ChangeEvent e) {
