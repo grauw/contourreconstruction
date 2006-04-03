@@ -14,11 +14,11 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 	static final int height = 400;
 	
 	MenuItem miOpenFile;
+	MenuItem miFileExit;
 	CheckboxMenuItem miDrawWolkpunten;
 	CheckboxMenuItem miDrawCentroids;
 	CheckboxMenuItem miDrawTangentLines;
 	CheckboxMenuItem miDrawNormalVectors;
-	CheckboxMenuItem miDrawSignedDistance;
 	CheckboxMenuItem miDrawSpanningTree;
 	CheckboxMenuItem miDrawMarchedSquares;
 	CheckboxMenuItem miUseBruteForceSquares;
@@ -54,6 +54,10 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		miOpenFile = new MenuItem("Opên filé...");
 		miOpenFile.addActionListener(this);
 		mFile.add(miOpenFile);
+		mFile.add(new MenuItem("-"));
+		miFileExit = new MenuItem("Exit");
+		miFileExit.addActionListener(this);
+		mFile.add(miFileExit);
 		menubar.add(mFile);
 		
 		Menu mDraw = new Menu("Draw");
@@ -72,9 +76,6 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		miDrawSpanningTree = new CheckboxMenuItem("Spanning tree", wolkvlak.drawspanningtree);
 		miDrawSpanningTree.addItemListener(this);
 		mDraw.add(miDrawSpanningTree);
-		miDrawSignedDistance = new CheckboxMenuItem("Signed distance", wolkvlak.drawsigneddistance);
-		miDrawSignedDistance.addItemListener(this);
-		mDraw.add(miDrawSignedDistance);
 		miDrawMarchedSquares = new CheckboxMenuItem("Marched squares", wolkvlak.drawmarchedsquares);
 		miDrawMarchedSquares.addItemListener(this);
 		mDraw.add(miDrawMarchedSquares);
@@ -155,9 +156,6 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		} else if (e.getSource() == miDrawSpanningTree) {
 			wolkvlak.drawspanningtree = miDrawSpanningTree.getState();
 			wolkvlak.repaint();
-		} else if (e.getSource() == miDrawSignedDistance) {
-			wolkvlak.drawsigneddistance = miDrawSignedDistance.getState();
-			wolkvlak.repaint();
 		} else if (e.getSource() == miDrawMarchedSquares) {
 			wolkvlak.drawmarchedsquares = miDrawMarchedSquares.getState();
 			wolkvlak.repaint();
@@ -172,15 +170,15 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 			wolkvlak.reloadWolk();
 		} else if (e.getSource() == miOpenFile) {
 			kiesBestand();
+		} else if (e.getSource() == miFileExit) {
+			dispose();
+			System.exit(0);
 		}
 	}
 	
 	public void kiesBestand() {
-		System.out.println("één");
-		JFileChooser chooser = new JFileChooser();
-		System.out.println("twee");
+		JFileChooser chooser = new JFileChooser(".");
 		int returnVal = chooser.showOpenDialog(this);
-		System.out.println("drie");
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			wolkvlak.filename = chooser.getSelectedFile().getName();
 			wolkvlak.reloadWolk();

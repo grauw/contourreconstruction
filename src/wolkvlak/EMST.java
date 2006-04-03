@@ -90,7 +90,7 @@ public class EMST {
 			for (int j=0; j<wolk.size(); j++) {
 				if (edge[i][j]) {
 					cost[i][j] = 1 - Math.abs(wolk.get(i).normalVector.dot(wolk.get(j).normalVector));
-					cost[i][j] += 1 - Math.abs(wolk.get(j).minus(wolk.get(i)).normalize().dot(wolk.get(i).tangentVector));
+//					cost[i][j] += 1 - Math.abs(wolk.get(j).minus(wolk.get(i)).normalize().dot(wolk.get(i).tangentVector));
 				}
 			}
 		}
