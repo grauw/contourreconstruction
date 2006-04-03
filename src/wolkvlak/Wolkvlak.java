@@ -20,6 +20,8 @@ public class Wolkvlak extends Canvas {
 	public boolean drawsigneddistance = true;
 	public boolean drawmarchedsquares = true;
 	public boolean usebruteforcesquares = false;
+	public boolean usefix1 = false;
+	public boolean usefix2 = false;
 	
 	public int grid = 100;
 	public double delta = 5;
@@ -32,11 +34,11 @@ public class Wolkvlak extends Canvas {
 	final int VECTORSCHAAL = 10;
 	
 	public Wolkvlak() {
-		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta, usebruteforcesquares);
+		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta, usebruteforcesquares, usefix1, usefix2);
 	}
 	
 	public void reloadWolk() {
-		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta, usebruteforcesquares);
+		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta, usebruteforcesquares, usefix1, usefix2);
 		repaint();
 	}
 	

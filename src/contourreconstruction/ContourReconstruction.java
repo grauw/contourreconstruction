@@ -22,6 +22,8 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 	CheckboxMenuItem miDrawSpanningTree;
 	CheckboxMenuItem miDrawMarchedSquares;
 	CheckboxMenuItem miUseBruteForceSquares;
+	CheckboxMenuItem miUseFix1;
+	CheckboxMenuItem miUseFix2;
 	MenuItem miRedraw;
 	JSlider range_grid, range_sample, range_planes_k, range_emst_k;
 	
@@ -79,14 +81,23 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		miDrawMarchedSquares = new CheckboxMenuItem("Marched squares", wolkvlak.drawmarchedsquares);
 		miDrawMarchedSquares.addItemListener(this);
 		mDraw.add(miDrawMarchedSquares);
-		mDraw.add(new MenuItem("-"));
+		menubar.add(mDraw);
+		
+		Menu mTweaks = new Menu("Tweaks");
 		miUseBruteForceSquares = new CheckboxMenuItem("Use brute force squares", wolkvlak.usebruteforcesquares);
 		miUseBruteForceSquares.addItemListener(this);
-		mDraw.add(miUseBruteForceSquares);
+		mTweaks.add(miUseBruteForceSquares);
+		miUseFix1 = new CheckboxMenuItem("Use fix1 (prefer straight lines)", wolkvlak.usefix1);
+		miUseFix1.addItemListener(this);
+		mTweaks.add(miUseFix1);
+		miUseFix2 = new CheckboxMenuItem("Use fix2 (better sharp corners)", wolkvlak.usefix2);
+		miUseFix2.addItemListener(this);
+		mTweaks.add(miUseFix2);
 		miRedraw = new MenuItem("Redraw");
 		miRedraw.addActionListener(this);
-		mDraw.add(miRedraw);
-		menubar.add(mDraw);
+		mTweaks.add(miRedraw);
+		menubar.add(mTweaks);
+	
 		setMenuBar(menubar);
 		
 		Container c = Box.createVerticalBox();
@@ -132,9 +143,9 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		c.add(range_grid);
 		c.add(new Label("Sample density:"));
 		c.add(range_sample);
-		c.add(new Label("Nearest neighbours (planes):"));
+		c.add(new Label("Nr. of neighbours (planes):"));
 		c.add(range_planes_k);
-		c.add(new Label("Nearest neighbours (EMST):"));
+		c.add(new Label("Nr. of neighbours (MST):"));
 		c.add(range_emst_k);
 		
 		add(c, BorderLayout.WEST);
@@ -162,6 +173,12 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		} else if (e.getSource() == miUseBruteForceSquares) {
 			wolkvlak.usebruteforcesquares = miUseBruteForceSquares.getState();
 			wolkvlak.recalcSquarePunten();
+		} else if (e.getSource() == miUseFix1) {
+			wolkvlak.usefix1 = miUseFix1.getState();
+			wolkvlak.reloadWolk();
+		} else if (e.getSource() == miUseFix2) {
+			wolkvlak.usefix2 = miUseFix2.getState();
+			wolkvlak.reloadWolk();
 		}
 	}
 	

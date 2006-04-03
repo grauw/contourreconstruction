@@ -6,6 +6,10 @@ public class EMST {
 	public int n;					// the current number of terminals
 	public boolean edge[][];		// the minimum spanning tree edges
 	public double cost[][];			// the minimum spanning tree edges
+	public double cost_tangentrichtinggewicht = 1.0;
+	
+	public boolean fix1 = false;	//lower cost for centroids closer to tangent
+	public boolean fix2 = false;	//flip normals for lines in opposite direction of normal
 	
 	//mst - compute a minimum spanning tree using Prim's algorithm with "dumb"
 	//heaps.  This is the fastest graph algorithm for complete graphs, though
@@ -90,7 +94,11 @@ public class EMST {
 			for (int j=0; j<wolk.size(); j++) {
 				if (edge[i][j]) {
 					cost[i][j] = 1 - Math.abs(wolk.get(i).normalVector.dot(wolk.get(j).normalVector));
-//					cost[i][j] += 1 - Math.abs(wolk.get(j).minus(wolk.get(i)).normalize().dot(wolk.get(i).tangentVector));
+					if (fix1) {
+						cost[i][j] += cost_tangentrichtinggewicht * (1 - Math.abs(wolk.get(j).minus(wolk.get(i)).normalize().dot(wolk.get(i).tangentVector)));
+					}
+//					cost[i][j] += cost_tangentrichtinggewicht * (1 - Math.abs(wolk.get(j).centroid.minus(wolk.get(i).centroid).normalize().dot(wolk.get(i).tangentVector)));
+//					cost[i][j] += .5 * wolk.get(j).distance(wolk.get(i));
 				}
 			}
 		}
@@ -149,9 +157,20 @@ public class EMST {
 				// voor laagste edge, fix de normaal
 				geweestePunkten[laagstej] = true;
 				geweesteEdges[laagstei][laagstej] = true;
-				if (wolk.get(laagstei).normalVector.dot(wolk.get(laagstej).normalVector) < 0) {
-					wolk.get(laagstej).normalVector = wolk.get(laagstej).normalVector.times(-1);
+				if (!fix2) {
+					if (wolk.get(laagstei).normalVector.dot(wolk.get(laagstej).normalVector) < 0) {
+						wolk.get(laagstej).normalVector = wolk.get(laagstej).normalVector.times(-1);
+					}
+				} else {
+					if ((wolk.get(laagstei).normalVector.dot(wolk.get(laagstej).normalVector) < 0) != 
+						(Math.acos(wolk.get(laagstei).minus(wolk.get(laagstej)).normalize().dot(wolk.get(laagstej).normalVector)) < Math.toRadians(20))) {
+						wolk.get(laagstej).normalVector = wolk.get(laagstej).normalVector.times(-1);
+					}
 				}
+//				if ((wolk.get(laagstei).normalVector.dot(wolk.get(laagstej).normalVector) < 0) != 
+//					(Math.acos(wolk.get(laagstei).centroid.minus(wolk.get(laagstej).centroid).normalize().dot(wolk.get(laagstej).normalVector)) < Math.toRadians(20))) {
+//					wolk.get(laagstej).normalVector = wolk.get(laagstej).normalVector.times(-1);
+//				}
 			} else {
 				//klaar
 				break;
@@ -159,4 +178,5 @@ public class EMST {
 		};
 		
 	}
+	final double maxhoek = Math.cos(Math.toRadians(45));
 }

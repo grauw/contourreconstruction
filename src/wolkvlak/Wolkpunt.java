@@ -41,10 +41,10 @@ public class Wolkpunt extends Punt {
 		double covYY = covarianceYY(punten, centroid);
 		double covXY = covarianceXY(punten, centroid);
 		
-		Point2D.Double eigenValues = eigenValues(covXX, covYY, covXY);
+		Punt eigenValues = eigenValues(covXX, covYY, covXY);
 		
-		tangentVector = eigenVector(covXX, covXY, eigenValues.x);
-		normalVector = eigenVector(covXX, covXY, eigenValues.y);		
+		tangentVector = eigenVector(covXX, covYY, covXY, eigenValues.x);
+		normalVector = eigenVector(covXX, covYY, covXY, eigenValues.y);		
 		
 	}
 	
@@ -149,10 +149,10 @@ public class Wolkpunt extends Punt {
 		return eigenValues;
 	}
 	
-	private Punt eigenVector(double covXX, double covXY, double eigenValue) {
+	private Punt eigenVector(double covXX, double covYY, double covXY, double eigenValue) {
 		Punt vector;
 		if (covXY == 0) {
-			vector = new Punt(1.0, Math.signum(-(covXX - eigenValue)));
+			vector = new Punt(Math.signum(-(covYY - eigenValue)), Math.signum(-(covXX - eigenValue)));
 		} else {
 			vector = new Punt(1.0, -(covXX - eigenValue) / covXY);
 		}

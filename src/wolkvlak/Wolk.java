@@ -20,8 +20,10 @@ public class Wolk extends Vector<Wolkpunt> {
 	
 	Vector<Punt> squarepunten;
 	
-	public Wolk(File file, int k, int k_emst, int grid, double delta, boolean usebruteforcesquares) {
+	public Wolk(File file, int k, int k_emst, int grid, double delta, boolean usebruteforcesquares, boolean fix1, boolean fix2) {
 		this.usebruteforcesquares = usebruteforcesquares;
+		emst.fix1 = fix1;
+		emst.fix2 = fix2;
 		
 		BufferedReader reader;
 		try {
