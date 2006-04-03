@@ -127,9 +127,9 @@ public class Wolk extends Vector<Wolkpunt> {
 			boolean bottomright = signedDistance(i+1, j+1, array_offset, stepx, stepy) < delta;
 			
 			if (topleft    != topright)    punten.add(new Punt(minx+(i+.5)*stepx,miny+ j    *stepy));
-			if (bottomleft != bottomright) punten.add(new Punt(minx+(i+.5)*stepx,miny+(j+1) *stepy));
 			if (topleft    != bottomleft)  punten.add(new Punt(minx+ i    *stepx,miny+(j+.5)*stepy));
 			if (topright   != bottomright) punten.add(new Punt(minx+(i+1) *stepx,miny+(j+.5)*stepy));
+			if (bottomleft != bottomright) punten.add(new Punt(minx+(i+.5)*stepx,miny+(j+1) *stepy));
 			
 			// recur (if not visited previously)
 			if (topleft    != topright)    punten = zetMeDieSquaresRecur(i, j-1, punten, array_offset, stepx, stepy, delta);
