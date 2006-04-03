@@ -107,6 +107,7 @@ public class Wolk extends Vector<Wolkpunt> {
 	
 	// modifies punten object
 	private Vector<Punt> zetMeDieSquaresRecur(int i, int j, Vector<Punt> punten, int array_offset, double stepx, double stepy, double delta) {
+		if (array_offset+i < 0 || array_offset+i > array_offset*4 || array_offset+j < 0 || array_offset+j > array_offset*4) return punten;
 		System.out.print("Square: "+i+", "+j);
 		if (!visitedsquares[array_offset+i][array_offset+j]) {
 			System.out.println(" - not visited");
