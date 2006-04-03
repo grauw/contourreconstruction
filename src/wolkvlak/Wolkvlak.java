@@ -19,27 +19,29 @@ public class Wolkvlak extends Canvas {
 	public boolean drawspanningtree = true;
 	public boolean drawsigneddistance = true;
 	public boolean drawmarchedsquares = true;
+	public boolean usebruteforcesquares = false;
 	
 	public int grid = 100;
 	public double delta = 5;
 	public int k_planes = 3;
 	public int k_emst = 4;
-	public String filename = "prac3-1.txt"; 
+	public String filename = "prac3-2.txt"; 
 	
 	public Wolk wolk;
 	
 	final int VECTORSCHAAL = 10;
 	
 	public Wolkvlak() {
-		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta);		
+		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta, usebruteforcesquares);
 	}
 	
 	public void reloadWolk() {
-		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta);
+		wolk = new Wolk(new File(filename), k_planes, k_emst, grid, delta, usebruteforcesquares);
 		repaint();
 	}
 	
 	public void recalcSquarePunten() {
+		wolk.usebruteforcesquares = true;
 		wolk.squarepunten = wolk.zetMeDieSquaresJeWéétToch(grid, delta);		
 		repaint();
 	}

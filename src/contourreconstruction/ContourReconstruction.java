@@ -21,6 +21,7 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 	CheckboxMenuItem miDrawSignedDistance;
 	CheckboxMenuItem miDrawSpanningTree;
 	CheckboxMenuItem miDrawMarchedSquares;
+	CheckboxMenuItem miUseBruteForceSquares;
 	MenuItem miRedraw;
 	JSlider range_grid, range_sample, range_planes_k, range_emst_k;
 	
@@ -78,6 +79,9 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		miDrawMarchedSquares.addItemListener(this);
 		mDraw.add(miDrawMarchedSquares);
 		mDraw.add(new MenuItem("-"));
+		miUseBruteForceSquares = new CheckboxMenuItem("Use brute force squares", wolkvlak.usebruteforcesquares);
+		miUseBruteForceSquares.addItemListener(this);
+		mDraw.add(miUseBruteForceSquares);
 		miRedraw = new MenuItem("Redraw");
 		miRedraw.addActionListener(this);
 		mDraw.add(miRedraw);
@@ -157,6 +161,9 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		} else if (e.getSource() == miDrawMarchedSquares) {
 			wolkvlak.drawmarchedsquares = miDrawMarchedSquares.getState();
 			wolkvlak.repaint();
+		} else if (e.getSource() == miUseBruteForceSquares) {
+			wolkvlak.usebruteforcesquares = miUseBruteForceSquares.getState();
+			wolkvlak.recalcSquarePunten();
 		}
 	}
 	

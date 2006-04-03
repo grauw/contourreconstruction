@@ -15,11 +15,14 @@ public class Wolk extends Vector<Wolkpunt> {
 	double maxy = Double.NEGATIVE_INFINITY;
 	double minx = Double.POSITIVE_INFINITY;
 	double miny = Double.POSITIVE_INFINITY;
+	boolean usebruteforcesquares = false;
 	EMST emst = new EMST();
 	
 	Vector<Punt> squarepunten;
 	
-	public Wolk(File file, int k, int k_emst, int grid, double delta) {
+	public Wolk(File file, int k, int k_emst, int grid, double delta, boolean usebruteforcesquares) {
+		this.usebruteforcesquares = usebruteforcesquares;
+		
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(file));
@@ -102,12 +105,17 @@ public class Wolk extends Vector<Wolkpunt> {
 		System.out.println("Found square after "+q+" tries");
 		
 		Vector<Punt> punten = new Vector<Punt>();
+		if (usebruteforcesquares) {
+			for (int a=0; a<grid; a++)
+				for (int b=0; b<grid; b++)
+					punten = zetMeDieSquaresRecur(a, b, punten, array_offset, stepx, stepy, delta);
+		}
 		return zetMeDieSquaresRecur(i, j, punten, array_offset, stepx, stepy, delta);
 	}
 	
 	// modifies punten object
 	private Vector<Punt> zetMeDieSquaresRecur(int i, int j, Vector<Punt> punten, int array_offset, double stepx, double stepy, double delta) {
-		if (array_offset+i < 0 || array_offset+i > array_offset*4 || array_offset+j < 0 || array_offset+j > array_offset*4) return punten;
+		if (i < -array_offset || i >= array_offset*3 || j < -array_offset || j >= array_offset*3) return punten;
 		System.out.print("Square: "+i+", "+j);
 		if (!visitedsquares[array_offset+i][array_offset+j]) {
 			System.out.println(" - not visited");
