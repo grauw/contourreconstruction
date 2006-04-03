@@ -79,10 +79,10 @@ public class Wolk extends Vector<Wolkpunt> {
 		double stepy = (maxy-miny) / grid;
 		
 		// initialise arrays
-		signeddistances = new double[2*grid+1][2*grid+1];
-		for (int i=0; i<signeddistances.length; i++)
-			for (int j=0; j<signeddistances[i].length; j++)
-				signeddistances[i][j] = Double.NaN;
+//		signeddistances = new double[2*grid+1][2*grid+1];
+//		for (int i=0; i<signeddistances.length; i++)
+//			for (int j=0; j<signeddistances[i].length; j++)
+//				signeddistances[i][j] = Double.NaN;
 		visitedsquares = new boolean[2*grid][2*grid];
 		// (initialised to ‘false’)
 		int array_offset = grid/2;
