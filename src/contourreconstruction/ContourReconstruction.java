@@ -176,8 +176,11 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 	}
 	
 	public void kiesBestand() {
-		JFileChooser chooser = new JFileChooser("c:\\");
+		System.out.println("één");
+		JFileChooser chooser = new JFileChooser();
+		System.out.println("twee");
 		int returnVal = chooser.showOpenDialog(this);
+		System.out.println("drie");
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			wolkvlak.filename = chooser.getSelectedFile().getName();
 			wolkvlak.reloadWolk();
