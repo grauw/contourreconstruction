@@ -85,6 +85,7 @@ public class Wolk extends Vector<Wolkpunt> {
 				signeddistances[i][j] = Double.NaN;
 		visitedsquares = new boolean[2*grid][2*grid];
 		// (initialised to ‘false’)
+		int array_offset = grid/2;
 		
 		// try to find a starting point randomly
 		int i = 0, j = 0, q;
@@ -101,20 +102,20 @@ public class Wolk extends Vector<Wolkpunt> {
 		System.out.println("Found square after "+q+" tries");
 		
 		Vector<Punt> punten = new Vector<Punt>();
-		return zetMeDieSquaresRecur(i, j, punten, grid, stepx, stepy, delta);
+		return zetMeDieSquaresRecur(i, j, punten, array_offset, stepx, stepy, delta);
 	}
 	
 	// modifies punten object
-	private Vector<Punt> zetMeDieSquaresRecur(int i, int j, Vector<Punt> punten, int grid, double stepx, double stepy, double delta) {
+	private Vector<Punt> zetMeDieSquaresRecur(int i, int j, Vector<Punt> punten, int array_offset, double stepx, double stepy, double delta) {
 		System.out.print("Square: "+i+", "+j);
-		if (!visitedsquares[grid/2+i][grid/2+j]) {
+		if (!visitedsquares[array_offset+i][array_offset+j]) {
 			System.out.println(" - not visited");
-			visitedsquares[grid/2+i][grid/2+j] = true;
+			visitedsquares[array_offset+i][array_offset+j] = true;
 			
-			boolean topleft = signedDistance(i, j, grid, stepx, stepy) < delta;
-			boolean topright = signedDistance(i+1, j, grid, stepx, stepy) < delta;
-			boolean bottomleft = signedDistance(i, j+1, grid, stepx, stepy) < delta;
-			boolean bottomright = signedDistance(i+1, j+1, grid, stepx, stepy) < delta;
+			boolean topleft = signedDistance(i, j, array_offset, stepx, stepy) < delta;
+			boolean topright = signedDistance(i+1, j, array_offset, stepx, stepy) < delta;
+			boolean bottomleft = signedDistance(i, j+1, array_offset, stepx, stepy) < delta;
+			boolean bottomright = signedDistance(i+1, j+1, array_offset, stepx, stepy) < delta;
 			
 			if (topleft    != topright)    punten.add(new Punt(minx+(i+.5)*stepx,miny+ j    *stepy));
 			if (bottomleft != bottomright) punten.add(new Punt(minx+(i+.5)*stepx,miny+(j+1) *stepy));
@@ -122,10 +123,10 @@ public class Wolk extends Vector<Wolkpunt> {
 			if (topright   != bottomright) punten.add(new Punt(minx+(i+1) *stepx,miny+(j+.5)*stepy));
 			
 			// recur (if not visited previously)
-			if (topleft    != topright)    punten = zetMeDieSquaresRecur(i, j-1, punten, grid, stepx, stepy, delta);
-			if (bottomleft != bottomright) punten = zetMeDieSquaresRecur(i, j+1, punten, grid, stepx, stepy, delta);
-			if (topleft    != bottomleft)  punten = zetMeDieSquaresRecur(i-1, j, punten, grid, stepx, stepy, delta);
-			if (topright   != bottomright) punten = zetMeDieSquaresRecur(i+1, j, punten, grid, stepx, stepy, delta);
+			if (topleft    != topright)    punten = zetMeDieSquaresRecur(i, j-1, punten, array_offset, stepx, stepy, delta);
+			if (bottomleft != bottomright) punten = zetMeDieSquaresRecur(i, j+1, punten, array_offset, stepx, stepy, delta);
+			if (topleft    != bottomleft)  punten = zetMeDieSquaresRecur(i-1, j, punten, array_offset, stepx, stepy, delta);
+			if (topright   != bottomright) punten = zetMeDieSquaresRecur(i+1, j, punten, array_offset, stepx, stepy, delta);
 		} else {
 			System.out.println(" - already visited");
 		}
@@ -149,11 +150,14 @@ public class Wolk extends Vector<Wolkpunt> {
 		return ofthespacecowboy;
 	}
 	
-	public double signedDistance(int i, int j, int grid, double stepx, double stepy) {
-		if (Double.isNaN(signeddistances[grid/2+i][grid/2+j])) {
-			signeddistances[grid/2+i][grid/2+j] = signedDistance(new Punt(minx+i*stepx,miny+j*stepy));
-		}
-		return signeddistances[grid/2+i][grid/2+j];
+	public double signedDistance(int i, int j, int array_offset, double stepx, double stepy) {
+		// cache signed distances
+		// XXX CACHING doesn’t work!?
+//		if (Double.isNaN(signeddistances[array_offset+i][array_offset+j])) {
+//			signeddistances[array_offset+i][array_offset+j] = signedDistance(new Punt(minx+i*stepx,miny+j*stepy));
+//		}
+//		return signeddistances[array_offset+i][array_offset+j];
+		return signedDistance(new Punt(minx+i*stepx,miny+j*stepy));
 	}
 	
 }

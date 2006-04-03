@@ -21,6 +21,7 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 	CheckboxMenuItem miDrawSignedDistance;
 	CheckboxMenuItem miDrawSpanningTree;
 	CheckboxMenuItem miDrawMarchedSquares;
+	MenuItem miRedraw;
 	JSlider range_grid, range_sample, range_planes_k, range_emst_k;
 	
 	Wolkvlak wolkvlak;
@@ -76,6 +77,10 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		miDrawMarchedSquares = new CheckboxMenuItem("Marched squares", wolkvlak.drawmarchedsquares);
 		miDrawMarchedSquares.addItemListener(this);
 		mDraw.add(miDrawMarchedSquares);
+		mDraw.add(new MenuItem("-"));
+		miRedraw = new MenuItem("Redraw");
+		miRedraw.addActionListener(this);
+		mDraw.add(miRedraw);
 		menubar.add(mDraw);
 		setMenuBar(menubar);
 		
@@ -156,7 +161,9 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		
+		if (e.getSource() == miRedraw) {
+			wolkvlak.reloadWolk();
+		}
 	}
 	
 	public void stateChanged(ChangeEvent e) {
@@ -168,6 +175,9 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 			wolkvlak.recalcSquarePunten();
 		} else if (e.getSource() == range_planes_k && !range_planes_k.getValueIsAdjusting()) {
 			wolkvlak.k_planes = range_planes_k.getValue();
+			wolkvlak.reloadWolk();
+		} else if (e.getSource() == range_emst_k && !range_emst_k.getValueIsAdjusting()) {
+			wolkvlak.k_emst = range_emst_k.getValue();
 			wolkvlak.reloadWolk();
 		} else if (e.getSource() == range_emst_k && !range_emst_k.getValueIsAdjusting()) {
 			wolkvlak.k_emst = range_emst_k.getValue();
