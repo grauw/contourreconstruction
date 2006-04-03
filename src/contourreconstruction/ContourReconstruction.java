@@ -82,16 +82,15 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		Container c = Box.createVerticalBox();
 		c.setBackground(UIManager.getColor("control"));
 		
-		range_grid = new JSlider(0,200,wolkvlak.grid);
-		range_sample = new JSlider(0,1500,(int)Math.round(wolkvlak.delta*100));
+		range_grid = new JSlider(1,200,wolkvlak.grid);
+		range_sample = new JSlider(0,2000,(int)Math.round(wolkvlak.delta*100));
 		range_planes_k = new JSlider(1,10,wolkvlak.k_planes);
 		range_emst_k = new JSlider(0,10,wolkvlak.k_emst);
 		
-		range_grid.setMajorTickSpacing(100);
+		range_grid.setMajorTickSpacing(199);
 		range_grid.setMinorTickSpacing(10);
 		range_grid.setPaintTicks(true);
 		range_grid.setPaintLabels(true);
-		range_grid.setSnapToTicks(true);
 		
 		range_sample.setMajorTickSpacing(500);
 		range_sample.setMinorTickSpacing(100);
@@ -99,7 +98,7 @@ public class ContourReconstruction extends Frame implements ItemListener, Action
 		range_sample.setPaintLabels(true);
 		Hashtable<Integer,JLabel> labelTable = new Hashtable<Integer,JLabel>();
 		labelTable.put( new Integer( 0 ), new JLabel("0") );
-		labelTable.put( new Integer( 1500 ), new JLabel("15") );
+		labelTable.put( new Integer( 2000 ), new JLabel("20") );
 		range_sample.setLabelTable( labelTable );
 		
 		range_planes_k.setMajorTickSpacing(9);

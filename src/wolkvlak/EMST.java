@@ -17,6 +17,7 @@ public class EMST {
 		double minDist, d;
 		
 		edge = new boolean[n][n];
+		// initialised to false
 		
 		double[] dist = new double[n];
 		int[] neigh = new int[n];

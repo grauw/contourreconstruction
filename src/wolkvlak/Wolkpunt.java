@@ -9,12 +9,17 @@ public class Wolkpunt extends Punt {
 	Punt tangentVector;
 	Punt normalVector;
 
-	public double signedDistance() {
-		return signedDistance(this);
-	}
-	
 	public double signedDistance(Punt p) {		
 		return p.minus(centroid).dot(normalVector);		
+	}
+	
+	public double signedDistance(Punt p, double delta) {
+		double sdistance = signedDistance(p);
+		Punt z = centroid.minus(normalVector.times(sdistance));
+		//XXX sheet zegt d(z,X) < d, niet d(z,p_i)...
+		// (maar ik denk dat het een aardige benadering is)
+		if (z.distance(this) < delta) return sdistance;
+		else return java.lang.Double.POSITIVE_INFINITY;
 	}
 	
 	public void calcCentroid(Wolk wolk, int k) {

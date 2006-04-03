@@ -70,6 +70,68 @@ public class Wolk extends Vector<Wolkpunt> {
 		return new Rectangle2D.Double(minx, miny, maxx - minx, maxy - miny);
 	}
 	
+	double[][] signeddistances;
+	public boolean[][] visitedsquares;
+	
+	// Create vector with pairs of points
+	public Vector<Punt> zetMeDieSquaresJeWéétToch(int grid, double delta) {
+		double stepx = (maxx-minx) / grid;
+		double stepy = (maxy-miny) / grid;
+		
+		// initialise arrays
+		signeddistances = new double[2*grid+1][2*grid+1];
+		for (int i=0; i<signeddistances.length; i++)
+			for (int j=0; j<signeddistances[i].length; j++)
+				signeddistances[i][j] = Double.NaN;
+		visitedsquares = new boolean[2*grid][2*grid];
+		// (initialised to ‘false’)
+		
+		// try to find a starting point randomly
+		int i = 0, j = 0, q;
+		Random r = new Random();
+		for (q=0; q<10000; q++) { //try max. 10000 times
+			i = r.nextInt(grid);
+			j = r.nextInt(grid);
+			boolean topleft = signedDistance(i, j, grid, stepx, stepy) < delta;
+			boolean topright = signedDistance(i, j+1, grid, stepx, stepy) < delta;
+			boolean bottomleft = signedDistance(i+1, j, grid, stepx, stepy) < delta;
+			boolean bottomright = signedDistance(i+1, j+1, grid, stepx, stepy) < delta;
+			if (!(topleft == topright == bottomleft == bottomright)) break;
+		}
+		System.out.println("Found square after "+q+" tries");
+		
+		Vector<Punt> punten = new Vector<Punt>();
+		return zetMeDieSquaresRecur(i, j, punten, grid, stepx, stepy, delta);
+	}
+	
+	// modifies punten object
+	private Vector<Punt> zetMeDieSquaresRecur(int i, int j, Vector<Punt> punten, int grid, double stepx, double stepy, double delta) {
+		System.out.print("Square: "+i+", "+j);
+		if (!visitedsquares[grid/2+i][grid/2+j]) {
+			System.out.println(" - not visited");
+			visitedsquares[grid/2+i][grid/2+j] = true;
+			
+			boolean topleft = signedDistance(i, j, grid, stepx, stepy) < delta;
+			boolean topright = signedDistance(i+1, j, grid, stepx, stepy) < delta;
+			boolean bottomleft = signedDistance(i, j+1, grid, stepx, stepy) < delta;
+			boolean bottomright = signedDistance(i+1, j+1, grid, stepx, stepy) < delta;
+			
+			if (topleft    != topright)    punten.add(new Punt(minx+(i+.5)*stepx,miny+ j    *stepy));
+			if (bottomleft != bottomright) punten.add(new Punt(minx+(i+.5)*stepx,miny+(j+1) *stepy));
+			if (topleft    != bottomleft)  punten.add(new Punt(minx+ i    *stepx,miny+(j+.5)*stepy));
+			if (topright   != bottomright) punten.add(new Punt(minx+(i+1) *stepx,miny+(j+.5)*stepy));
+			
+			// recur (if not visited previously)
+			if (topleft    != topright)    punten = zetMeDieSquaresRecur(i, j-1, punten, grid, stepx, stepy, delta);
+			if (bottomleft != bottomright) punten = zetMeDieSquaresRecur(i, j+1, punten, grid, stepx, stepy, delta);
+			if (topleft    != bottomleft)  punten = zetMeDieSquaresRecur(i-1, j, punten, grid, stepx, stepy, delta);
+			if (topright   != bottomright) punten = zetMeDieSquaresRecur(i+1, j, punten, grid, stepx, stepy, delta);
+		} else {
+			System.out.println(" - already visited");
+		}
+		return punten;
+	}
+	
 	public double signedDistance(Punt p) {
 		Iterator<Wolkpunt> iter = iterator();
 		Wolkpunt dichtstebij = null;
@@ -87,32 +149,11 @@ public class Wolk extends Vector<Wolkpunt> {
 		return ofthespacecowboy;
 	}
 	
-	public Vector<Punt> zetMeDieSquaresJeWéétToch(double grid, double delta) {
-		Vector<Punt> punten = new Vector<Punt>();
-		
-		double stepx = (maxx-minx) / grid;
-		double stepy = (maxy-miny) / grid;
-		
-		for (int i=0; i<grid; i++) {
-			for (int j=0; j<grid; j++) {
-				Punt puntTL = new Punt(minx+i*stepx,miny+j*stepy);
-				Punt puntTR = new Punt(minx+(i+1)*stepx,miny+j*stepy);
-				Punt puntBL = new Punt(minx+i*stepx,miny+(j+1)*stepy);
-				Punt puntBR = new Punt(minx+(i+1)*stepx,miny+(j+1)*stepy);
-				
-				boolean topleft = signedDistance(puntTL) < delta;
-				boolean topright = signedDistance(puntTR) < delta;
-				boolean bottomleft = signedDistance(puntBL) < delta;
-				boolean bottomright = signedDistance(puntBR) < delta;
-				
-				if (topleft    != topright)    punten.add(new Punt(minx+(i+.5)*stepx,miny+ j    *stepy));
-				if (bottomleft != bottomright) punten.add(new Punt(minx+(i+.5)*stepx,miny+(j+1) *stepy));
-				if (topleft    != bottomleft)  punten.add(new Punt(minx+ i    *stepx,miny+(j+.5)*stepy));
-				if (topright   != bottomright) punten.add(new Punt(minx+(i+1) *stepx,miny+(j+.5)*stepy));
-			}
+	public double signedDistance(int i, int j, int grid, double stepx, double stepy) {
+		if (Double.isNaN(signeddistances[grid/2+i][grid/2+j])) {
+			signeddistances[grid/2+i][grid/2+j] = signedDistance(new Punt(minx+i*stepx,miny+j*stepy));
 		}
-		
-		return punten;
+		return signeddistances[grid/2+i][grid/2+j];
 	}
 	
 }

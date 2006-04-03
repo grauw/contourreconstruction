@@ -21,7 +21,7 @@ public class Wolkvlak extends Canvas {
 	public boolean drawmarchedsquares = true;
 	
 	public int grid = 100;
-	public double delta = 1;
+	public double delta = 5;
 	public int k_emst = 4;
 	public int k_planes = 4;
 	public String filename = "prac3-1.txt"; 
@@ -140,12 +140,6 @@ public class Wolkvlak extends Canvas {
 		
 		offsetx = (int) Math.round((width - Math.min(width, height)) / 2.0 - rect.x*scale);
 		offsety = height - (int) Math.round((height - Math.min(width, height)) / 2.0 - rect.y*scale);
-		
-		// draw coordinate system
-/*		g.setColor(Color.LIGHT_GRAY);
-		g.drawLine(offset_x, 0, offset_x, height);
-		g.drawLine(0, offset_y, width, offset_y);
-*/		
 	}
 	
 	/**
